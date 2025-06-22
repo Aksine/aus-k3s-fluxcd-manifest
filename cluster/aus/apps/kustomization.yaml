@@ -3,5 +3,4 @@ kind: Kustomization
 metadata:
   name: traefik-internal
 resources:
-  - cert-secret.yaml
-  - helm-release.yaml
+  - traefik-internal
