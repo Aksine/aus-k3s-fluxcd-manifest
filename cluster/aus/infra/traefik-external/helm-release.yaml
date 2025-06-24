@@ -25,6 +25,9 @@ spec:
     remediation:
       retries: 3
   values:
+    #
+    # Configure the deployment
+    #
     deployment:
       # -- Enable deployment
       enabled: true
@@ -99,32 +102,22 @@ spec:
 
     providers:
       kubernetesCRD:
-        # -- Load Kubernetes IngressRoute provider
         enabled: true
-        # -- Allows IngressRoute to reference resources in namespace other than theirs
         allowCrossNamespace: false
-        # -- Allows to reference ExternalName services in IngressRoute
-        allowExternalNameServices: false
-        # -- Allows to return 503 when there is no endpoints available
+        allowExternalNameServices: true
         allowEmptyServices: false
-        # ingressClass: traefik-internal
-        # labelSelector: environment=production,method=traefik
-        # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces.
+        ingressClass: traefik-ext
         namespaces: []
 
           # - "default"
 
       kubernetesIngress:
-        # -- Load Kubernetes Ingress provider
         enabled: true
-        # -- Allows to reference ExternalName services in Ingress
-        allowExternalNameServices: false
-        # -- Allows to return 503 when there is no endpoints available
+        allowExternalNameServices: true
         allowEmptyServices: false
-        # ingressClass: traefik-internal
-        # labelSelector: environment=production,method=traefik
-        # -- Array of namespaces to watch. If left empty, Traefik watches all namespaces.
+        ingressClass: traefik-ext
         namespaces: []
+
           # - "default"
         # IP used for Kubernetes Ingress endpoints
         publishedService:
@@ -139,6 +132,7 @@ spec:
     globalArguments:
       - "--global.checknewversion"
       - "--global.sendanonymoususage"
+      - '--providers.kubernetesingress.ingressclass="traefik-ext"'
 
 
     ports:
@@ -159,7 +153,7 @@ spec:
         # -- You SHOULD NOT expose the traefik port on production deployments.
         # If you want to access it from outside your cluster,
         # use `kubectl port-forward` or create a secure ingress
-        expose:
+        expose: 
           default: false
         # -- The exposed port for this service
         exposedPort: 9000
@@ -299,10 +293,6 @@ spec:
     #   default:
     #     defaultCertificate:
     #       secretName: tls-cert
-    tlsStore:
-      default:
-        defaultCertificate:
-          secretName: aksine-lcl
 
     service:
       enabled: true
@@ -322,7 +312,7 @@ spec:
       # -- Cannot contain type, selector or ports entries.
       spec: {
         # externalTrafficPolicy: Cluster
-        loadBalancerIP: "192.168.10.115"
+        loadBalancerIP: "192.168.10.120"
         }
         # clusterIP: "2.3.4.5"
       loadBalancerSourceRanges: []
