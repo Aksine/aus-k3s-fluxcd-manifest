@@ -1,0 +1,51 @@
+
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflared
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: cloudflared
+      version: 35.4.0
+      sourceRef:
+        kind: HelmRepository
+        name: cloudflare-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: cloudflare/cloudflared
+      tag: ""
+      imagePullPolicy: IfNotPresent
+
+    ## @section Deployment parameters
+
+    ## @param replicaCount The number of replicas to deploy.
+    ##
+    replicaCount: 3
+    ## @param tunnelID The Argo Tunnel ID you created. Check the configuration section for details.
+    ##
+
+    cloudflare:
+      tunnelName: "aus"
+      secretName: cloudflared-secret
+      enableWarp: false
+      ## @param ingress The ingress settings to apply. Check the configuration section for examples.
+      ##
+      ingress:
+        - hostname: guac-aus.aksine-am.com
+          service: http://guac:8080
+        - hostname: obs-livesync.aksine-am.com
+          service: http://obs-livesync:5984
+
