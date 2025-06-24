@@ -5,3 +5,4 @@ resources:
   - traefik-external
   - ceph-csi-cephfs
   - cloudflared
+  - cert-manager
