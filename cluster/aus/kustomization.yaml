@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - apps.yaml
   - flux-system
-  - repos
+  - repos.yaml
