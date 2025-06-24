@@ -4,3 +4,4 @@ resources:
   - traefik-internal
   - traefik-external
   - ceph-csi-cephfs
+  - cloudflared
