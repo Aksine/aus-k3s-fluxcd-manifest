@@ -3,5 +3,6 @@ kind: Kustomization
 metadata:
   name: test
 resources:
-  - apps
+  - secrets.yaml
+  - apps.yaml
   - flux-system
