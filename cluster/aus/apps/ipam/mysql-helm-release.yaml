@@ -11,7 +11,7 @@ spec:
       version: 13.0.0
       sourceRef:
         kind: HelmRepository
-        name: ipam-charts
+        name: bitnami-charts
         namespace: flux-system
       interval: 5m
   install:
