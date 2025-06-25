@@ -17,4 +17,4 @@ spec:
   type: "oci"
   interval: 1h
   timeout: 3m
-  url: oci://registry-1.docker.io/bitnamicharts
+  url: oci://registry-1.docker.io/bitnamicharts/mysql
