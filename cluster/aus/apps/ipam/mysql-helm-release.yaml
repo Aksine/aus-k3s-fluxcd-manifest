@@ -1,0 +1,74 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ipam-mysql
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: mysql
+      version: 13.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: app-template-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    primary: 
+      # Enable persistence using Persistent Volume Claims
+      persistence: 
+        # If true, use a Persistent Volume Claim, If false, use emptyDir
+        enabled: true
+        # MySQL primary Pod security context
+        existingClaim: ipam-pvc
+      configuration: |-
+        [mysqld]
+        skip-name-resolve
+        explicit_defaults_for_timestamp
+        basedir=/opt/bitnami/mysql
+        plugin_dir=/opt/bitnami/mysql/lib/plugin
+        port={{ .Values.primary.containerPorts.mysql }}
+
+        socket=/opt/bitnami/mysql/tmp/mysql.sock
+        datadir=/bitnami/mysql/data
+        tmpdir=/opt/bitnami/mysql/tmp
+        max_allowed_packet=16M
+        bind-address=*
+        pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+        log-error=/opt/bitnami/mysql/logs/mysqld.log
+        character-set-server=UTF8
+        slow_query_log=0
+        long_query_time=10.0
+        {{- if .Values.tls.enabled }}
+        ssl_cert=/opt/bitnami/mysql/certs/{{ .Values.tls.certFilename }}
+        ssl_key=/opt/bitnami/mysql/certs/{{ .Values.tls.certKeyFilename }}
+        {{- if (include "mysql.tlsCACert" .) }}
+        ssl_ca={{ include "mysql.tlsCACert" . }}
+        {{- end }}
+        {{- end }}
+
+        [client]
+        port={{ .Values.primary.containerPorts.mysql }}
+        socket=/opt/bitnami/mysql/tmp/mysql.sock
+        default-character-set=UTF8
+        plugin_dir=/opt/bitnami/mysql/lib/plugin
+
+        [manager]
+        port={{ .Values.primary.containerPorts.mysql }}
+        socket=/opt/bitnami/mysql/tmp/mysql.sock
+        pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+    auth:
+      existingSecret: ipam-mysql-secret
+      authenticationPolicy: ""
+    image:
+      tag: 5.7.43
