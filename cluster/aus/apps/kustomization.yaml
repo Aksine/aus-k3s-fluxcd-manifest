@@ -6,3 +6,4 @@ resources:
   - jenkins
   - obs-livesync
   - muse
+  - mail
