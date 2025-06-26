@@ -1,0 +1,113 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: muse
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: app-template-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/docker-mailserver/docker-mailserver
+              tag: latest
+            env:
+              ENABLE_RSPAMD: 1
+              ENABLE_CLAMAV: 1
+              ENABLE_FAIL2BAN: 0
+              OVERRIDE_HOSTNAME: mail.aksine.lcl
+              TZ: Australia/Melbourne
+              LOG_LEVEL: trace
+              SSL_TYPE: 
+            securityContext:
+              capabilities:
+                add: ["NET_ADMIN", "SYS_TIME"]
+
+    service:
+      main:
+        enabled: true
+        type: LoadBalancer
+        controller: main
+        primary: true
+        loadBalancerIP: 192.168.10.119
+        annotations:
+          metallb.universe.tf/allow-shared-ip: mail-svc
+        ports:
+          smtp:
+            enabled: true
+            primary: true
+            port: 25
+            targetPort: 25
+            protocol: TCP
+          secure-smtp1:
+            enabled: true
+            port: 465
+            targetPort: 465
+            protocol: TCP
+          secure-smtp2:
+            enabled: true
+            port: 587
+            targetPort: 587
+            protocol: TCP
+          secure-imap:
+            enabled: true
+            port: 993
+            targetPort: 993
+            protocol: TCP
+          secure-imap2:
+            enabled: true
+            port: 143
+            targetPort: 143
+            protocol: TCP
+          http:
+            enabled: false
+            port: 80
+    ingress:
+      main:
+        enabled: false
+    persistence:
+      mail-data:
+        enabled: true
+        existingClaim: mail-data-pvc
+        globalMounts:
+          - path: /var/mail
+
+      mail-state:
+        enabled: true
+        existingClaim: mail-state-pvc
+        globalMounts:
+          - path: /var/mail-state
+
+      mail-logs:
+        enabled: true
+        existingClaim: mail-logs-pvc
+        globalMounts:
+          - path: /var/log/mail
+      
+
+      mail-config:
+        enabled: true
+        existingClaim: mail-config-pvc
+        globalMounts:
+          - path: /tmp/docker-mailserver
+
