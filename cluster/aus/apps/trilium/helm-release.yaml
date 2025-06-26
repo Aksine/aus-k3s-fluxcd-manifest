@@ -1,0 +1,74 @@
+
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: trilium
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: app-template-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      main:
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: zadam/trilium
+              tag: 0.53.2
+            env:
+              TRILIUM_DATA_DIR: /data
+        initContainers:
+            fix-permissions: 
+              image: 
+                repository: docker.io/busybox
+                tag: latest
+              command:
+                - chown
+                - -R
+                - 1000:1000
+                - /data
+
+
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+      
+    ingress:
+      main:
+        enabled: true
+        hosts:
+          - host: notes.aksine.lcl
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+
+    persistence:
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: trilium-pvc
