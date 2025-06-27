@@ -87,8 +87,8 @@ spec:
     # -- Create a default IngressClass for Traefik
     ingressClass:
       enabled: true
-      isDefaultClass: true
-      # name: my-custom-class
+      isDefaultClass: false
+      name: traefik-ext
 
 
 
@@ -289,10 +289,10 @@ spec:
     # -- TLS Store are created as TLSStore CRDs. This is useful if you want to set a default certificate
     # https://doc.traefik.io/traefik/https/tls/#default-certificate
     # Example:
-    # tlsStore:
-    #   default:
-    #     defaultCertificate:
-    #       secretName: tls-cert
+    tlsStore:
+      default:
+        defaultCertificate:
+          secretName: aksine-am-com-tls
 
     service:
       enabled: true
