@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: aksine-am-com
-  namespace: cert-manager
 spec:
   secretName: aksine-am-com-tls
   additionalOutputFormats:
