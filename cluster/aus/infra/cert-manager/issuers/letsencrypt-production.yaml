@@ -16,7 +16,7 @@ spec:
             email: aksign.am@gmail.com
             apiKeySecretRef:
               name: cloudflare-api-secret
-              key: cloudflare-token
+              key: cloudflare-api
         selector:
           dnsZones:
             - "aksine-am.com"
