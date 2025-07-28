@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: gslb
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: k8gb
+      namespace: flux-system
+  interval: 1m0s
+  path: ./gslb
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
