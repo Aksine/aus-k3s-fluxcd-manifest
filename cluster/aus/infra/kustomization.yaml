@@ -6,3 +6,4 @@ resources:
   - ceph-csi-cephfs
   - cloudflared
   - cert-manager
+  - k8gb
