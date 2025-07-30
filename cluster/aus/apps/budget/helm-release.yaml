@@ -57,7 +57,7 @@ spec:
     # -- Configure persistence settings for the chart under this key.
     # @default -- See values.yaml
     persistence:
-      config:
+      data:
         enabled: true
         existingClaim: budget-pvc
 
