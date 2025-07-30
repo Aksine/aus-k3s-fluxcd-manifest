@@ -289,10 +289,10 @@ spec:
     # -- TLS Store are created as TLSStore CRDs. This is useful if you want to set a default certificate
     # https://doc.traefik.io/traefik/https/tls/#default-certificate
     # Example:
-    tlsStore:
-      default:
-        defaultCertificate:
-          secretName: aksine-am-com-tls
+    # tlsStore:
+    #   default:
+    #     defaultCertificate:
+    #       secretName: aksine-am-com-tls
 
     service:
       enabled: true
