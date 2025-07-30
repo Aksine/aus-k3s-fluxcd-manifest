@@ -1,0 +1,65 @@
+
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: budget
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: app-template-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: docker.io/actualbudget/actual-server
+              tag: 25.7.1-alpine
+                # -- environment variables.
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 5006
+    ingress:
+      # -- Enable and configure ingress settings for the chart under this key.
+      main:
+        enabled: true
+        hosts:
+          - host: budget.aksine.lcl
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+
+
+    # -- Configure persistence settings for the chart under this key.
+    # @default -- See values.yaml
+    persistence:
+      config:
+        enabled: true
+        existingClaim: budget-pvc
+
+
+
