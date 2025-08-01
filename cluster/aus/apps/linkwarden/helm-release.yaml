@@ -1,154 +1,175 @@
-# values.yaml for Linkwarden using bjw-s common chart
-controllers:
-  # Main Linkwarden application
-  linkwarden:
-    containers:
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: linkwarden
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: app-template-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    controllers:
       linkwarden:
-        image:
-          repository: ghcr.io/linkwarden/linkwarden
-          tag: latest
-          pullPolicy: IfNotPresent
-        env:
-          DATABASE_URL: "postgresql://postgres:{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}@postgres:5432/postgres"
-        envFrom:
-          # Add your environment variables here or use a secret/configmap
-          - configMapRef:
-              name: linkwarden-config
-          - secretRef:
-              name: linkwarden-secrets
-        probes:
-          liveness:
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /
-                port: 3000
-              initialDelaySeconds: 30
-              periodSeconds: 10
-          readiness:
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /
-                port: 3000
-              initialDelaySeconds: 5
-              periodSeconds: 5
-    initContainers:
-      wait-for-postgres:
-        image:
-          repository: postgres
-          tag: 16-alpine
-        command:
-          - sh
-          - -c
-          - |
-            until pg_isready -h postgres -p 5432 -U postgres; do
-              echo "Waiting for postgres..."
-              sleep 2
-            done
-        env:
-          PGPASSWORD: "{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}"
+        containers:
+          linkwarden:
+            image:
+              repository: ghcr.io/linkwarden/linkwarden
+              tag: latest
+              pullPolicy: IfNotPresent
+            env:
+              DATABASE_URL: "postgresql://postgres:{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}@postgres:5432/postgres"
+            envFrom:
+              - configMapRef:
+                  name: linkwarden-config
+              - secretRef:
+                  name: linkwarden-secrets
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 3000
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 3000
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
+        initContainers:
+          wait-for-postgres:
+            image:
+              repository: postgres
+              tag: 16-alpine
+            command:
+              - sh
+              - -c
+              - |
+                until pg_isready -h postgres -p 5432 -U postgres; do
+                  echo "Waiting for postgres..."
+                  sleep 2
+                done
+            env:
+              PGPASSWORD: "{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}"
 
-  # PostgreSQL database
-  postgres:
-    containers:
+      # PostgreSQL database
       postgres:
-        image:
-          repository: postgres
-          tag: 16-alpine
-          pullPolicy: IfNotPresent
-        env:
-          POSTGRES_DB: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD:
-            valueFrom:
-              secretKeyRef:
-                name: postgres-secrets
-                key: POSTGRES_PASSWORD
-          PGDATA: /var/lib/postgresql/data/pgdata
-        probes:
-          liveness:
-            enabled: true
-            custom: true
-            spec:
-              exec:
-                command:
-                  - pg_isready
-                  - -U
-                  - postgres
-                  - -d
-                  - postgres
-              initialDelaySeconds: 30
-              periodSeconds: 10
-          readiness:
-            enabled: true
-            custom: true
-            spec:
-              exec:
-                command:
-                  - pg_isready
-                  - -U
-                  - postgres
-                  - -d
-                  - postgres
-              initialDelaySeconds: 5
-              periodSeconds: 5
+        containers:
+          postgres:
+            image:
+              repository: postgres
+              tag: 16-alpine
+              pullPolicy: IfNotPresent
+            env:
+              POSTGRES_DB: postgres
+              POSTGRES_USER: postgres
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-secrets
+                    key: POSTGRES_PASSWORD
+              PGDATA: /var/lib/postgresql/data/pgdata
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - pg_isready
+                      - -U
+                      - postgres
+                      - -d
+                      - postgres
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - pg_isready
+                      - -U
+                      - postgres
+                      - -d
+                      - postgres
+                  initialDelaySeconds: 5
+                  periodSeconds: 5
 
 
 
-# Services
-service:
-  linkwarden:
-    controller: linkwarden
-    ports:
-      http:
-        port: 3000
-        targetPort: 3000
-        protocol: HTTP
-  postgres:
-    controller: postgres
-    ports:
-      postgresql:
-        port: 5432
-        targetPort: 5432
-        protocol: TCP
-
-
-# Persistent storage
-persistence:
-  postgres-data:
-    enabled: true
-    type: persistentVolumeClaim
-    existingClaim: linkwarden-pvc
-    advancedMounts:
-      postgres:
-        postgres:
-          - path: /var/lib/postgresql/data
-            readOnly: false
-
-  linkwarden-data:
-    enabled: true
-    type: persistentVolumeClaim
-    existingClaim: linkwarden-pvc
-    advancedMounts:
+    # Services
+    service:
       linkwarden:
-        linkwarden:
-          - path: /data/data
-            readOnly: false
+        controller: linkwarden
+        ports:
+          http:
+            port: 3000
+            targetPort: 3000
+            protocol: HTTP
+      postgres:
+        controller: postgres
+        ports:
+          postgresql:
+            port: 5432
+            targetPort: 5432
+            protocol: TCP
 
 
-# Ingress (optional)
-ingress:
-  linkwarden:
-    enabled: true  # Set to true to enable ingress
-    hosts:
-      - host: linkwarden.lcl  # Change to your domain
-        paths:
-          - path: /
-            pathType: Prefix
-            service:
-              identifier: linkwarden
-              port: http
+    # Persistent storage
+    persistence:
+      postgres-data:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: linkwarden-pvc
+        advancedMounts:
+          postgres:
+            postgres:
+              - path: /var/lib/postgresql/data
+                readOnly: false
 
+      linkwarden-data:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: linkwarden-pvc
+        advancedMounts:
+          linkwarden:
+            linkwarden:
+              - path: /data/data
+                readOnly: false
+
+
+    ingress:
+      linkwarden:
+        enabled: true 
+        hosts:
+          - host: linkwarden.aksine.lcl  
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: linkwarden
+                  port: http
