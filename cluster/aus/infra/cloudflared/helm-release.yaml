@@ -49,4 +49,5 @@ spec:
           service: http://guac:8080
         - hostname: obs-livesync.aksine-am.com
           service: http://obs-livesync:5984
-
+        - hostname: linkwarden.aksine-am.com
+          service: http://linkwarden:3000
