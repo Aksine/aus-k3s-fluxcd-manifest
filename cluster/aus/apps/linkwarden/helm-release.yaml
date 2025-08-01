@@ -31,9 +31,7 @@ spec:
             image:
               repository: ghcr.io/linkwarden/linkwarden
               tag: latest
-              pullPolicy: IfNotPresent
-            env:
-              DATABASE_URL: "postgresql://postgres:{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}@linkwarden-postgres:5432/postgres"
+              pullPolicy: IfNotPresent   
             envFrom:
               - secretRef:
                   name: linkwarden-secrets
@@ -70,7 +68,11 @@ spec:
                   sleep 2
                 done
             env:
-              PGPASSWORD: "{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}"
+              PGPASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: postgres-secrets
+                    key: POSTGRES_PASSWORD
 
       # PostgreSQL database
       postgres:
