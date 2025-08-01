@@ -35,8 +35,6 @@ spec:
             env:
               DATABASE_URL: "postgresql://postgres:{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}@linkwarden-postgres:5432/postgres"
             envFrom:
-              - configMapRef:
-                  name: linkwarden-config
               - secretRef:
                   name: linkwarden-secrets
             probes:
