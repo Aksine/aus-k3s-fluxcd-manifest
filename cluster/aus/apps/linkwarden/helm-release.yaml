@@ -33,7 +33,7 @@ spec:
               tag: latest
               pullPolicy: IfNotPresent
             env:
-              DATABASE_URL: "postgresql://postgres:{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}@postgres:5432/postgres"
+              DATABASE_URL: "postgresql://postgres:{{ .Values.controllers.postgres.containers.postgres.env.POSTGRES_PASSWORD }}@linkwarden-postgres:5432/postgres"
             envFrom:
               - configMapRef:
                   name: linkwarden-config
@@ -67,7 +67,7 @@ spec:
               - sh
               - -c
               - |
-                until pg_isready -h postgres -p 5432 -U postgres; do
+                until pg_isready -h linkwarden-postgres -p 5432 -U postgres; do
                   echo "Waiting for postgres..."
                   sleep 2
                 done
