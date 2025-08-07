@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
   - graf-cred-secret.yaml
   - graf-helm-release.yaml
+  - graf-pv.yaml
+  - graf-pvc.yaml
