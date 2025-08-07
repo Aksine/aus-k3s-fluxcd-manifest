@@ -5,3 +5,7 @@ resources:
   - graf-helm-release.yaml
   - graf-pv.yaml
   - graf-pvc.yaml
+  - influxdb-helm-release.yaml
+  - influxdb-pv.yaml
+  - influxdb-pvc.yaml
+  - influxdb-cred-secret.yaml

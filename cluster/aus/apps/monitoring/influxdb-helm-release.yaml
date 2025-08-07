@@ -1,0 +1,69 @@
+
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: influxdb
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: influxdb2
+      version: 2.7.1
+      sourceRef:
+        kind: HelmRepository
+        name: influxdb-charts
+        namespace: flux-system
+      interval: 5m
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+
+image:
+  repository: influxdb
+  tag: 2.7.4-alpine
+  pullPolicy: IfNotPresent
+
+
+
+
+## Create default user through docker entrypoint
+## Defaults indicated below
+##
+adminUser:
+  organization: "influxdata"
+  bucket: "default"
+  user: "admin"
+  retention_policy: "0s"
+
+
+  ## The password and token are obtained from an existing secret. The expected
+  ## keys are `admin-password` and `admin-token`.
+  ## If set, the password and token values above are ignored.
+  existingSecret: influxdb-cred-secret
+
+## Persist data to a persistent volume
+##
+persistence:
+  enabled: true
+  ## If true will use an existing PVC instead of creating one
+  useExisting: true
+  ## Name of existing PVC to be used in the influx deployment
+  name: influxdb-pvc
+
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8086
+  annotations: {}
+  labels: {}
+  portName: http
+
