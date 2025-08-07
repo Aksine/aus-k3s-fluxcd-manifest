@@ -49,6 +49,7 @@ spec:
       repository: grafana/grafana
       # Overrides the Grafana image tag whose default is the chart appVersion
       tag: 12.0.4
+      pullPolicy: Always 
     route:
       main:
         # -- Enables or disables the route
@@ -78,15 +79,6 @@ spec:
 
         ## Additional custom rules that can be added to the route
         additionalRules: []
-
-    resources: 
-    limits:
-      cpu: 200m
-      memory: 2048Mi
-    requests:
-      cpu: 100m
-      memory: 1024Mi
-
 
     persistence:
 
