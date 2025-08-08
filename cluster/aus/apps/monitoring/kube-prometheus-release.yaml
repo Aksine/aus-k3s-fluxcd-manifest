@@ -163,16 +163,16 @@ spec:
           mode: console
         grafana_net:
           url: https://grafana.net
-        server:
-          domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
+        # server:
+        #   domain: "{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl (.Values.ingress.hosts | first) . }}{{ else }}''{{ end }}"
       
       # Additional data sources - Prometheus will be auto-configured
       additionalDataSources:
-        - name: Prometheus
-          type: prometheus
-          url: http://{{ include "kube-prometheus-stack.fullname" . }}-prometheus.{{ .Release.Namespace }}.svc.cluster.local:9090
-          access: proxy
-          isDefault: true
+        # - name: Prometheus
+        #   type: prometheus
+        #   url: http://{{ include "kube-prometheus-stack.fullname" . }}-prometheus.{{ .Release.Namespace }}.svc.cluster.local:9090
+        #   access: proxy
+        #   isDefault: true
 
         - name: InfluxDB
           type: influxdb
