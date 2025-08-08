@@ -184,6 +184,7 @@ spec:
             organization: influxdata
           secureJsonData:
             token: $__env{INFLUXDB_TOKEN}
+          editable: true
       env:
         INFLUXDB_TOKEN:
           valueFrom:
