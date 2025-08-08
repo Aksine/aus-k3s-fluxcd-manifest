@@ -1,13 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - kube-prometheus-release.yaml
   - graf-cred-secret.yaml
-  - graf-helm-release.yaml
   - graf-pv.yaml
   - graf-pvc.yaml
-  - kube-prometheus-release.yaml
   - prometheus-pv.yaml
   - prometheus-pvc.yaml
+  - influxdb-helm-release.yaml
   - influxdb-pv.yaml
   - influxdb-pvc.yaml
   - influxdb-cred-secret.yaml
