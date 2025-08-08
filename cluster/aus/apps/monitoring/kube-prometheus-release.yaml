@@ -182,7 +182,6 @@ spec:
           jsonData:
             version: Flux
             organization: influxdata
-            defaultBucket: default
           secureJsonData:
             token: $__env{INFLUXDB_TOKEN}
       env:
