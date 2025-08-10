@@ -183,7 +183,7 @@ spec:
             version: Flux
             organization: influxdata
           secureJsonData:
-            token: $TOKEN
+            token: $ADMIN_TOKEN
           editable: true
       envFromSecret: influxdb-cred-secret
 
