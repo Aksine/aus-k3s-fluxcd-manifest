@@ -183,15 +183,9 @@ spec:
             version: Flux
             organization: influxdata
           secureJsonData:
-            token: $INFLUXDB_TOKEN
+            token: $admin_token
           editable: true
-      env:
-        INFLUXDB_TOKEN:
-          valueFrom:
-            secretKeyRef:
-              name: influxdb-cred-secret
-              key: admin-token
-    
+      envFromSecret: influxdb-cred-secret
 
     # Node Exporter (keep enabled for node metrics)
     nodeExporter:
