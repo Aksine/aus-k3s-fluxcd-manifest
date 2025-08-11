@@ -59,7 +59,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: default  # Match your existing PVC's storage class
+              storageClassName: csi-cephfs-sc  # Match your existing PVC's storage class
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:
