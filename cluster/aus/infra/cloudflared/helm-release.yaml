@@ -53,3 +53,4 @@ spec:
           service: http://linkwarden:3000
         - hostname: echuca.aksine-am.com
           service: https://aus-code.aksine.lcl
+          noTLSVerify: true
