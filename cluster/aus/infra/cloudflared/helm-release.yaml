@@ -51,3 +51,5 @@ spec:
           service: http://obs-livesync:5984
         - hostname: laenkvaektare.aksine-am.com
           service: http://linkwarden:3000
+        - hostname: echuca.aksine-am.com
+          service: https://aus-code.aksine.lcl
