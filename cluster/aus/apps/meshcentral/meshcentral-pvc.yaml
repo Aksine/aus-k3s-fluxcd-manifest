@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: meshcentral-pvc
+  name: meshc-pvc
   namespace: default
 spec:
   accessModes:
@@ -12,5 +12,5 @@ spec:
       storage: 1Gi
   volumeMode: Filesystem
   # volumeName should be same as PV name
-  volumeName: meshcentral-pv
+  volumeName: meshc-pv
   storageClassName: csi-cephfs-sc

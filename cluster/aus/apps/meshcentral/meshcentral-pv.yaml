@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: meshcentral-pv
+  name: meshc-pv
 spec:
   accessModes:
   - ReadWriteMany
@@ -23,6 +23,6 @@ spec:
       "rootPath": /volumes/kubernetes/meshcentral
     # volumeHandle can be anything, need not to be same
     # as PV name or volume name. keeping same for brevity
-    volumeHandle: meshcentral-pv
+    volumeHandle: meshc-pv
   persistentVolumeReclaimPolicy: Retain
   volumeMode: Filesystem

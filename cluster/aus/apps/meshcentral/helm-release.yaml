@@ -73,7 +73,7 @@ spec:
               - path: /opt/meshcentral/meshcentral-data/config.json
                 subPath: config.json
       data:
-        existingClaim: meshcentral-pvc
+        existingClaim: meshc-pvc
         globalMounts:
           - path: /root
             subPath: rootdir
