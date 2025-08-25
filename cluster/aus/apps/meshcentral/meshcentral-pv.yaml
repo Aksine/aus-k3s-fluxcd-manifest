@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: meshcentral-pv
+  namespace: default
 spec:
   accessModes:
   - ReadWriteMany
