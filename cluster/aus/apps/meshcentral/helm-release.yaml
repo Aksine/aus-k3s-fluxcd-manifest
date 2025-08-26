@@ -30,7 +30,7 @@ spec:
         containers:
           main:
             image:
-              repository: typhonragewind/meshcentral
+              repository: ghcr.io/ylianst/meshcentral
               tag: 1.1.48
                 # -- environment variables.
                 # See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
