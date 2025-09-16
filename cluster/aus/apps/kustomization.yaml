@@ -12,3 +12,4 @@ resources:
   - linkwarden
   - monitoring
   - meshcentral
+  - pdm
