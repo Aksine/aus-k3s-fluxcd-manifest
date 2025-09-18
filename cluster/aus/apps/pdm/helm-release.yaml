@@ -31,7 +31,7 @@ spec:
           main:
             image:
               repository: ghcr.io/aksine/proxmox-datacenter-manager-docker/pdm
-              tag: latest
+              tag: b7792c
                 # -- environment variables.
 
     service:
