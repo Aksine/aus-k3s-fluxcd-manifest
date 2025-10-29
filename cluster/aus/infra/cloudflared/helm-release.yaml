@@ -27,7 +27,7 @@ spec:
   values:
     image:
       repository: cloudflare/cloudflared
-      tag: ""
+      tag: "2025.10.0"
       imagePullPolicy: IfNotPresent
 
     ## @section Deployment parameters
