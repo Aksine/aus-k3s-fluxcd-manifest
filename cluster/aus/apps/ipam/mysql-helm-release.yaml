@@ -24,6 +24,11 @@ spec:
     remediation:
       retries: 3
   values:
+
+    global:
+      security:
+        ## @param global.security.allowInsecureImages Allows skipping image verification
+        allowInsecureImages: true
     primary: 
       # Enable persistence using Persistent Volume Claims
       persistence: 
