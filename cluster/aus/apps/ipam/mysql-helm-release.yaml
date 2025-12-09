@@ -71,4 +71,5 @@ spec:
       existingSecret: ipam-mysql-secret
       authenticationPolicy: ""
     image:
+      repository: bitnamilegacy/mysql
       tag: 5.7.43-debian-11-r8
