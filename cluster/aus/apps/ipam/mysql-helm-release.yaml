@@ -71,4 +71,4 @@ spec:
       existingSecret: ipam-mysql-secret
       authenticationPolicy: ""
     image:
-      tag: 5.7.43
+      tag: 5.7.43-debian-11-r8
