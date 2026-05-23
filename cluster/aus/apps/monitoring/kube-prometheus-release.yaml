@@ -185,7 +185,9 @@ spec:
           proxmox-ve:
             gnetId: 22559
             revision: 1
-            datasource: InfluxDB
+            datasource:
+              - name: DS_INFLUXDB
+                value: InfluxDB
       # Reference to external ConfigMaps
       dashboardsConfigMaps: {}
       
