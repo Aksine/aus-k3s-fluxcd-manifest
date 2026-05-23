@@ -153,6 +153,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/grafana-dashboards-kubernetes
+          - name: 'grafana-dashboards-proxmox'
+            orgId: 1
+            folder: 'Proxmox'
+            type: file
+            disableDeletion: true
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/grafana-dashboards-proxmox
       dashboards:
         grafana-dashboards-kubernetes:
           k8s-system-api-server:
@@ -173,6 +181,11 @@ spec:
           k8s-views-pods:
             url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
             token: ''
+        grafana-dashboards-proxmox:
+          proxmox-ve:
+            gnetId: 22559
+            revision: 1
+            datasource: InfluxDB
       # Reference to external ConfigMaps
       dashboardsConfigMaps: {}
       
