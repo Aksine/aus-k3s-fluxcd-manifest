@@ -53,6 +53,9 @@ spec:
           service: http://linkwarden:3000
         - hostname: crafty.aksine-am.com
           service: https://192.168.10.253:8443
+          originRequest:
+            connectTimeout: 10s
+            noTLSVerify: true
         - hostname: echuca.aksine-am.com
           service: https://aus-code.aksine.lcl
           originRequest:
