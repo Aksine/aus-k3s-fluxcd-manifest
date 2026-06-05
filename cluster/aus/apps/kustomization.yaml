@@ -8,7 +8,5 @@ resources:
   - muse
   - mail
   - trilium
-  - budget
-  - linkwarden
   - monitoring
   - meshcentral

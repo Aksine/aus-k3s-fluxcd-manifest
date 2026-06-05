@@ -49,8 +49,6 @@ spec:
           service: http://guac:8080
         - hostname: obs-livesync.aksine-am.com
           service: http://obs-livesync:5984
-        - hostname: laenkvaektare.aksine-am.com
-          service: http://linkwarden:3000
         - hostname: crafty.aksine-am.com
           service: https://192.168.10.253:8443
           originRequest:
