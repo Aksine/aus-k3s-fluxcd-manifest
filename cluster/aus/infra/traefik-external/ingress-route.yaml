@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: ingressroute
+  annotations: 
+    kubernetes.io/ingress.class: traefik-ext
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: HostSNI(`tshikepe.aksine-am.com`)
+      services:
+        - name: pth-frigate
+          port: 8971
+
+  # tls:
+  #   passthrough: true 
