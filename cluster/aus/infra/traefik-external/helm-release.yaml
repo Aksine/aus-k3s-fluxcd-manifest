@@ -290,9 +290,9 @@ spec:
     # https://doc.traefik.io/traefik/https/tls/#default-certificate
     # Example:
     tlsStore:
-      default:
-        defaultCertificate:
-          secretName: aksine-am-com-tls
+      # default:
+      #   defaultCertificate:
+      #     secretName: aksine-am-com-tls
 
     service:
       enabled: true
